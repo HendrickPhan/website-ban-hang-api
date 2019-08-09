@@ -6,24 +6,28 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
+use Modules\Product\Http\Requests\StoreProductRequest;
+use Modules\Product\Http\Requests\UpdateProductRequest;
+use Modules\Product\Services\ProductServiceContract;
+use Modules\Product\Transformers\ProductCollection;
+use Modules\Product\Transformers\ProductResource;
+
 class ProductController extends Controller
 {
+    protected $service;
+
+    public function __construct(ProductServiceContract $productService)
+    {
+        $this->service = $productService;
+    }
     /**
      * Display a listing of the resource.
      * @return Response
      */
     public function index()
     {
-        return view('product::index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     * @return Response
-     */
-    public function create()
-    {
-        return view('product::create');
+        $products = $this->service->paginate();
+        return new ProductCollection($products);
     }
 
     /**
@@ -31,9 +35,13 @@ class ProductController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        return new ProductResource(
+            $this->service->store($request->all())
+        );
     }
 
     /**
@@ -43,17 +51,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        return view('product::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param int $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        return view('product::edit');
+        return new ProductResource($this->service->find($id));
     }
 
     /**
@@ -62,9 +60,13 @@ class ProductController extends Controller
      * @param int $id
      * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateProductRequest $request, $id)
     {
-        //
+        $validated = $request->validated();
+
+        return new ProductResource(
+            $this->service->update($id, $request->all())
+        );
     }
 
     /**
@@ -74,6 +76,6 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return response()->json($this->service->destroy($id));
     }
 }
