@@ -39,7 +39,6 @@ class ProductCategoryServiceProvider extends ServiceProvider
             'Modules\ProductCategory\Repositories\ProductCategoryRepositoryContract',
             'Modules\ProductCategory\Repositories\ProductCategoryEloquentRepository'
         );
-       
     }
 
     /**
