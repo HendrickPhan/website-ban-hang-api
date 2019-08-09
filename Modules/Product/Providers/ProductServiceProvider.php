@@ -29,6 +29,16 @@ class ProductServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
+        
+        $this->app->bind(
+            'Modules\Product\Services\ProductServiceContract',
+            'Modules\Product\Services\ProductService'
+        );
+
+        $this->app->bind(
+            'Modules\Product\Repositories\ProductRepositoryContract',
+            'Modules\Product\Repositories\ProductEloquentRepository'
+        );
     }
 
     /**

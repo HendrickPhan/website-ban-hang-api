@@ -15,9 +15,11 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedInteger('category_id');
+            $table->unsignedInteger('brand_id')->nullable();
             $table->string('name', 100);
             $table->string('slug', 100)->unique();
-            $table->string('avatar')->nullable();
+            $table->string('avatar');
             $table->text('description')->nullable();
             $table->unsignedInteger('price');
             $table->unsignedInteger('discount_price')->nullable();
@@ -25,8 +27,6 @@ class CreateProductsTable extends Migration
             $table->tinyInteger('status');
             $table->text('seo_description')->nullable();
             $table->string('seo_title', 70)->nullable();
-            $table->unsignedInteger('category_id')->nullable();
-            $table->unsignedInteger('brand_id')->nullable();
             $table->timestamps();
         });
     }

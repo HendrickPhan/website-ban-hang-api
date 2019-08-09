@@ -3,11 +3,14 @@
 namespace Modules\Product\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Modules\ProductCategory\Entities\ProductCategory;
 
 class Product extends Model
 {
     protected $fillable = [
         'id',
+        'brand_id',
+        'category_id',
         'name',
         'slug',
         'avatar',
@@ -18,6 +21,10 @@ class Product extends Model
         'status',
         'seo_description',
         'seo_title',
-        'brand_id'
     ];
+
+    public function Category()
+    {
+        return $this->belongsTo(ProductCategory::class, 'category_id');
+    }
 }
